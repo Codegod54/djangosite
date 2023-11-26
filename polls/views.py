@@ -10,12 +10,12 @@ from django.views import generic
 
 
 # Create your views here.
+
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
-        """Return the last five published questions."""
         return Question.objects.order_by("-pub_date")[:5]
 
 
@@ -28,6 +28,7 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
 
+
 def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
     
@@ -36,7 +37,6 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
         return render(
             request,
             "polls/detail.html",
